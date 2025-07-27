@@ -7,14 +7,20 @@ pipeline {
                 git 'https://github.com/rohan11131113/python-flask-web-app.git'
             }
         }
+
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t flask-devops-app .'
+                script {
+                    dockerImage = docker.build('flask-ci-cd-project')
+                }
             }
         }
+
         stage('Run Container') {
             steps {
-                sh 'docker run -d -p 5000:5000 flask-devops-app'
+                script {
+                    dockerImage.run('-p 5000:5000')
+                }
             }
         }
     }
